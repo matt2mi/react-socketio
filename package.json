@@ -1,0 +1,37 @@
+{
+  "name": "lie-game-react",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build-server": "tsc server.ts",
+    "server": "./node_modules/.bin/concurrently \"ts-node-dev server.ts\" \"react-scripts-ts start\"",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0-alpha.6",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts-ts": "2.8.0",
+    "reactstrap": "^5.0.0-alpha.4",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.0.1",
+    "@types/node": "^8.5.7",
+    "@types/react": "^16.0.34",
+    "@types/react-dom": "^16.0.3",
+    "@types/react-router-dom": "^4.2.3",
+    "@types/reactstrap": "^5.0.10",
+    "@types/socket.io": "^1.4.31",
+    "@types/socket.io-client": "^1.4.32",
+    "concurrently": "^3.5.1",
+    "nodemon": "^1.14.8",
+    "ts-node": "^4.1.0",
+    "ts-node-dev": "^1.0.0-pre.7"
+  }
+}
