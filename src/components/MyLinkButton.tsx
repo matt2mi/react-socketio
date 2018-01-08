@@ -6,16 +6,15 @@ interface Props {
     cb: () => void
 }
 
-export default class MyLinkButton extends React.Component<Props> {
+export default class MyLinkButton extends React.Component<Props, {}> {
     constructor(props: any) {
         super(props);
-        this.cb = props.cb;
     }
-
+    
     // TODO get cb from Login to call it on click
     render() {
         return withRouter(({history}) => (
-            <Button color="primary" onClick={this.cb.bind(history)}>
+            <Button color="primary" onClick={() => this.props.cb(history)}>
                 Login
             </Button>
         ))
