@@ -1,22 +1,33 @@
 import * as React from 'react';
+import {SyntheticEvent} from 'react';
 import {Button} from 'reactstrap';
 import {withRouter} from 'react-router-dom';
+import {History} from 'history';
 
 interface Props {
-    cb: () => void
+    readonly cb: (e: SyntheticEvent<HTMLButtonElement>, history: History) => void;
+    readonly type: string;
 }
 
-export default class MyLinkButton extends React.Component<Props, {}> {
-    constructor(props: any) {
+export default class MyButton extends React.Component<Props, {}> {
+    Button: React.ComponentClass;
+
+    constructor(props: Props) {
         super(props);
-    }
-    
-    // TODO get cb from Login to call it on click
-    render() {
-        return withRouter(({history}) => (
-            <Button color="primary" onClick={() => this.props.cb(history)}>
-                Login
+        this.Button = withRouter(({history}) => (
+            <Button
+                type={this.props.type}
+                color="primary"
+                onClick={(e) => {
+                    this.props.cb(e, history);
+                }}
+            >
+                {this.props.children}
             </Button>
-        ))
+        ));
+    }
+
+    render() {
+        return <this.Button/>;
     }
 }

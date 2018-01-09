@@ -1,38 +1,53 @@
 import * as React from 'react';
+import {SyntheticEvent} from 'react';
 import {subscribeToApp} from '../helpers/api';
-import MyLinkButton from "./MyLinkButton";
+import MyButton from './MyLinkButton';
+import {History} from 'history';
 
-export default class Login extends React.Component {
+interface Props {
+}
 
-    state = {
-        pseudo: '',
-        connected: false,
-        welcomeMessage: ''
-    };
+interface State {
+    readonly pseudo: string;
+    readonly connected: boolean;
+    readonly welcomeMessage: string;
+}
 
-    constructor(props: any) {
-        super(props);
-        this.login = this.login.bind(this);
-        this.changeValue = this.changeValue.bind(this);
-    }
+export default class Login extends React.Component<Props, State> {
 
-    changeValue = (event: any) => {
+    changeValue = (event: React.FormEvent<HTMLInputElement>) => {
         this.setState({
-            ...this.state,
-            pseudo: event.target.value
+            pseudo: event.currentTarget.value
         });
     }
 
-    login = (event: React.FormEvent<HTMLFormElement>, history: any) => {
-        console.warn('logging', this.state.pseudo);
-        subscribeToApp((err: string, connected: boolean, welcomeMessage: string) => this.setState({
-                ...this.state,
-                connected,
-                welcomeMessage
-            }),
-            this.state.pseudo);
-        history.push('/waiting');
+    login = (event: SyntheticEvent<HTMLButtonElement>, history: History) => {
         event.preventDefault();
+        console.warn('logging', this.state.pseudo);
+        subscribeToApp(
+            (err: string, connected: boolean, welcomeMessage: string) => {
+                this.setState({
+                    connected,
+                    welcomeMessage
+                });
+                console.warn(welcomeMessage);
+                history.push('/waiting');
+            },
+            this.state.pseudo
+        );
+    }
+
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            pseudo: '',
+            connected: false,
+            welcomeMessage: ''
+        };
+
+        this.login = this.login.bind(this);
+        this.changeValue = this.changeValue.bind(this);
     }
 
     render() {
@@ -46,10 +61,10 @@ export default class Login extends React.Component {
                         <div className="card-block">
                             <form>
                                 <div className="form-group">
-                                    <label htmlFor="exampleInputPassword1">Pseudo</label>
+                                    <label>Pseudo</label>
                                     <input type="text" className="form-control" onChange={this.changeValue}/>
                                 </div>
-                                <MyLinkButton cb={this.login}/>
+                                <MyButton cb={this.login} type={'submit'}>Login</MyButton>
                             </form>
                             <br/>
                             <p>{this.state.welcomeMessage}</p>
