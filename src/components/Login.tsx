@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {SyntheticEvent} from 'react';
-import {subscribeToApp} from '../helpers/api';
+import {subscribeToApp} from '../helpers/io-api';
 import MyButton from './MyLinkButton';
 import {History} from 'history';
 
@@ -10,7 +10,6 @@ interface Props {
 interface State {
     readonly pseudo: string;
     readonly connected: boolean;
-    readonly welcomeMessage: string;
 }
 
 export default class Login extends React.Component<Props, State> {
@@ -23,15 +22,13 @@ export default class Login extends React.Component<Props, State> {
 
     login = (event: SyntheticEvent<HTMLButtonElement>, history: History) => {
         event.preventDefault();
-        console.warn('logging', this.state.pseudo);
         subscribeToApp(
-            (err: string, connected: boolean, welcomeMessage: string) => {
-                this.setState({
-                    connected,
-                    welcomeMessage
-                });
-                console.warn(welcomeMessage);
-                history.push('/waiting');
+            (error: string) => {
+                if (error.length > 0) {
+                    console.error(error);
+                } else {
+                    history.push('/waiting');
+                }
             },
             this.state.pseudo
         );
@@ -43,7 +40,6 @@ export default class Login extends React.Component<Props, State> {
         this.state = {
             pseudo: '',
             connected: false,
-            welcomeMessage: ''
         };
 
         this.login = this.login.bind(this);
@@ -66,8 +62,6 @@ export default class Login extends React.Component<Props, State> {
                                 </div>
                                 <MyButton cb={this.login} type={'submit'}>Login</MyButton>
                             </form>
-                            <br/>
-                            <p>{this.state.welcomeMessage}</p>
                         </div>
                     </div>
                 </div>
